@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,9 +15,72 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-black);
+  scroll-behavior: smooth;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+ :root{
+  --background-black:#171717;
+  --primary:#EE4950;
+  --spotify-green:#1DB954;
+  --nav-black:#272727;
+ }
+ button,h1,h2,h3,h4,h5,h6,p,li,em,div{
+  font-family: 'Inter', sans-serif;
+  color: white;
+  font-weight: 400;
+ }
+ .icon path{
+  fill:transparent ;
+  stroke: 5;
+  stroke: var(--primary);
+ }
+
+ .icons{
+  width: 1rem;
+  height: 1rem;
+}
+.iconsAudio{
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.iconsAudio:hover{
+  cursor: pointer;
+}
+
+ .icon.logo path{
+  stroke-dasharray:98;
+  stroke-dashoffset: 0;
+  animation: animate-logo 2s 2s linear forwards;
+ }
+
+ .icon.logo-text path{
+  stroke-dasharray:98;
+  stroke-dashoffset: 0;
+  animation: animate-logo 2s 2s linear forwards;
+ }
+
+
+ @keyframes animate-logo {
+  0%{
+    stroke-dashoffset: 0;
+  }
+  40%{
+    stroke-dashoffset: 98;
+    stroke: var(--primary);
+  }
+  80%{
+    stroke-dashoffset: 196;
+    fill: transparent;
+  }
+  100%{
+    stroke-dashoffset: 196;
+    fill: var(--primary) ;
+  }
+  
+ }
+ 
