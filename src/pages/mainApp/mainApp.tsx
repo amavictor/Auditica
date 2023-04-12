@@ -165,8 +165,7 @@ export const MainApp = () => {
     data: forYou,
     
   }=useGetRequest("for-you",getForYou)
-  console.log(forYou, "newjdsif");
-
+  //Please stop now 
 
   return (
     <MainContainer>
