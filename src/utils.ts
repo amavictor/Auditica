@@ -25,3 +25,12 @@ export const requests = async (options: any): Promise<AxiosResponse<any, any> | 
 };
 // // Set authorization header
 // export const setAuthorizationHeader = (token: string) => (AxiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`);
+
+
+
+
+//Utility functions
+
+export const SeeMore = (currentPageLimit: number, setCurrentPageLimit: any, increaseValue:number) => {
+  setCurrentPageLimit(currentPageLimit + increaseValue);
+}

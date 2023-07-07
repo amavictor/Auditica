@@ -1,8 +1,107 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getForYou, getNewRelease } from "../../apicalls";
+import { getForYou, getNewRelease } from "../../Apicalls/Albums/albums";
 import { useGetRequest } from "../../custom-hooks/get-request";
 import { MusicCard } from "../../ui_elements/musicCard";
+import { SeeMore } from "../../utils";
+
+export const MainApp = () => {
+  const [currentPageLimit, setCurrentPageLimit] = useState(20);
+
+  const {
+    data: newRelease,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetRequest("new-releases", () => getNewRelease(currentPageLimit, 0), {
+    refetchOnWindowFocus: false,
+  });
+  const { data: forYou } = useGetRequest("for-you", getForYou);
+  //Please stop
+
+  return (
+    <MainContainer>
+      <Banner>
+        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" />
+        <div>
+          <section>
+            <h5>Featured songs</h5>
+            <h4>Post Malone</h4>
+            <h2>Circles</h2>
+          </section>
+        </div>
+      </Banner>
+      <SongsContainer>
+        <SongsTitleContainer>
+          <h3>New Releases </h3>
+          <p onClick={() => SeeMore(currentPageLimit, setCurrentPageLimit, 10)}>
+            See more
+          </p>
+        </SongsTitleContainer>
+        <Songs>
+          {newRelease?.data?.albums?.items.map((song: any) => (
+            <MusicCard
+              image={song?.images[1]?.url}
+              title={song?.name}
+              artist={song?.artists[0]?.name}
+            />
+          ))}
+        </Songs>
+      </SongsContainer>
+
+      <SongsContainer>
+        <SongsTitleContainer>
+          <h3>Made For You </h3>
+          <p>See more</p>
+        </SongsTitleContainer>
+        <Songs>
+          {/* <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard /> */}
+        </Songs>
+      </SongsContainer>
+
+      <SongsContainer>
+        <SongsTitleContainer>
+          <h3>Your Top Mix </h3>
+          <p>See more</p>
+        </SongsTitleContainer>
+        <Songs>
+          {/* <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard /> */}
+        </Songs>
+      </SongsContainer>
+
+      <SongsContainer>
+        <SongsTitleContainer>
+          <h3>Recently Played </h3>
+          <p>See more</p>
+        </SongsTitleContainer>
+        <Songs>
+          {/* <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard />
+          <MusicCard /> */}
+        </Songs>
+      </SongsContainer>
+    </MainContainer>
+  );
+};
 
 const MainContainer = styled.main`
   max-width: 100% !important;
@@ -135,7 +234,6 @@ const Songs = styled.section`
 `;
 const SongsContainer = styled.div`
   margin-top: 6%;
-
 `;
 const SongsTitleContainer = styled.div`
   display: flex;
@@ -153,99 +251,3 @@ const SongsTitleContainer = styled.div`
     }
   }
 `;
-
-export const MainApp = () => {
-  const {
-    data: newRelease,
-    isLoading,
-    isFetching,
-    isError,
-  } = useGetRequest("new-releases", getNewRelease);
-  const {
-    data: forYou,
-    
-  }=useGetRequest("for-you",getForYou)
-  //Please stop now 
-
-  return (
-    <MainContainer>
-      <Banner>
-        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" />
-        <div>
-          <section>
-            <h5>Featured songs</h5>
-            <h4>Post Malone</h4>
-            <h2>Circles</h2>
-          </section>
-        </div>
-      </Banner>
-      <SongsContainer>
-        <SongsTitleContainer>
-          <h3>New Releases </h3>
-          <p>See more</p>
-        </SongsTitleContainer>
-        <Songs> 
-          {
-            newRelease?.data?.albums?.items.map((song: any) =>
-              <MusicCard
-                image={song?.images[1]?.url}
-                title={song?.name}
-                artist={song?.artists[0]?.name}
-              />)
-          }
-        </Songs>
-      </SongsContainer>
-
-      <SongsContainer>
-        <SongsTitleContainer>
-          <h3>Made For You </h3>
-          <p>See more</p>
-        </SongsTitleContainer>
-        <Songs>
-          {/* <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard /> */}
-        </Songs>
-      </SongsContainer>
-
-      <SongsContainer>
-        <SongsTitleContainer>
-          <h3>Your Top Mix </h3>
-          <p>See more</p>
-        </SongsTitleContainer>
-        <Songs>
-          {/* <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard /> */}
-        </Songs>
-      </SongsContainer>
-
-      <SongsContainer>
-        <SongsTitleContainer>
-          <h3>Recently Played </h3>
-          <p>See more</p>
-        </SongsTitleContainer>
-        <Songs>
-          {/* <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard /> */}
-        </Songs>
-      </SongsContainer>
-    </MainContainer>
-  );
-};
