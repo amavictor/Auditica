@@ -1,28 +1,61 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { getForYou, getNewRelease } from "../../Apicalls/Albums/albums";
 import { useGetRequest } from "../../custom-hooks/get-request";
 import { MusicCard } from "../../ui_elements/musicCard";
-import { SeeMore } from "../../utils";
+import { UserContext } from "../../contexts/contexts";
+import {
+  getUsersRecentlyPlayed,
+  getUsersTopItems,
+} from "../../Apicalls/User/users";
+import { ArtistCard } from "../../ui_elements/artistCard";
+import { TopMixCard } from "../../ui_elements/topMixCard";
 
 export const MainApp = () => {
-  const [currentPageLimit, setCurrentPageLimit] = useState(20);
+  // const{user} = useContext(UserContext)
 
   const {
     data: newRelease,
     isLoading,
     isFetching,
     isError,
-  } = useGetRequest("new-releases", () => getNewRelease(currentPageLimit, 0), {
+  } = useGetRequest("new-releases", () => getNewRelease(), {
     refetchOnWindowFocus: false,
   });
-  const { data: forYou } = useGetRequest("for-you", getForYou);
-  //Please stop
+
+  const { data: topItemsArtists } = useGetRequest(
+    "top-artists",
+    () => getUsersTopItems("artists"),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const { data: topItemsTracks } = useGetRequest(
+    "top-tracks",
+    () => getUsersTopItems("tracks"),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const { data: recentlyPlayed } = useGetRequest(
+    "me/player/recently-played",
+    () => getUsersRecentlyPlayed(),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+  console.log(recentlyPlayed, "HOHHOHOHOHHO");
 
   return (
     <MainContainer>
       <Banner>
         <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" />
+        <aside>
+          <h5>Good Morning</h5>
+          {/* <h4>{user?.display_name }</h4> */}
+        </aside>
         <div>
           <section>
             <h5>Featured songs</h5>
@@ -31,31 +64,72 @@ export const MainApp = () => {
           </section>
         </div>
       </Banner>
-      <SongsContainer>
-        <SongsTitleContainer>
-          <h3>New Releases </h3>
-          <p onClick={() => SeeMore(currentPageLimit, setCurrentPageLimit, 10)}>
-            See more
-          </p>
-        </SongsTitleContainer>
-        <Songs>
-          {newRelease?.data?.albums?.items.map((song: any) => (
-            <MusicCard
-              image={song?.images[1]?.url}
-              title={song?.name}
-              artist={song?.artists[0]?.name}
-            />
-          ))}
-        </Songs>
-      </SongsContainer>
 
-      <SongsContainer>
-        <SongsTitleContainer>
-          <h3>Made For You </h3>
-          <p>See more</p>
-        </SongsTitleContainer>
-        <Songs>
-          {/* <MusicCard />
+      <AllSongsHolder>
+        <SongsContainer>
+          <SongsTitleContainer>
+            <h3>New Releases </h3>
+            <p>See more</p>
+          </SongsTitleContainer>
+          <Songs>
+            {newRelease?.data?.albums?.items.map((song: any) => (
+              <MusicCard
+                image={song?.images[1]?.url}
+                title={song?.name}
+                artist={song?.artists[0]?.name}
+              />
+            ))}
+          </Songs>
+        </SongsContainer>
+
+        <SongsContainer>
+          <SongsTitleContainer>
+            <h3>From Your Favourite Artists</h3>
+            <p>See more</p>
+          </SongsTitleContainer>
+          <Songs>
+            {topItemsArtists?.data?.items?.map((song: any) => (
+              <ArtistCard image={song?.images[1]?.url} title={song?.name} />
+            ))}
+          </Songs>
+        </SongsContainer>
+
+        <SongsContainer>
+          <SongsTitleContainer>
+            <h3>Your Top Mixes</h3>
+            <p>See more</p>
+          </SongsTitleContainer>
+          <Songs>
+            {topItemsTracks?.data?.items?.map((song: any) => (
+              <TopMixCard
+                image={song?.album?.images[1]?.url}
+                title={song?.album?.name}
+                artists={song?.artists
+                  .map((artists: any) => artists?.name)
+                  .join(", ")}
+              />
+            ))}
+          </Songs>
+        </SongsContainer>
+
+        <SongsContainer>
+          <SongsTitleContainer>
+            <h3>Recently Played </h3>
+            <p>See more</p>
+          </SongsTitleContainer>
+          <Songs>
+            {recentlyPlayed?.data?.items?.map((song: any) => (
+              <TopMixCard
+                image={song?.track?.album?.images[1]?.url}
+                title={song?.track?.album?.name}
+                artists={song?.track?.artists
+                  .map((artists: any) => artists?.name)
+                  .join(", ")}
+              />
+            ))}
+          </Songs>
+          <Songs>
+            {/* <MusicCard />
           <MusicCard />
           <MusicCard />
           <MusicCard />
@@ -63,42 +137,9 @@ export const MainApp = () => {
           <MusicCard />
           <MusicCard />
           <MusicCard /> */}
-        </Songs>
-      </SongsContainer>
-
-      <SongsContainer>
-        <SongsTitleContainer>
-          <h3>Your Top Mix </h3>
-          <p>See more</p>
-        </SongsTitleContainer>
-        <Songs>
-          {/* <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard /> */}
-        </Songs>
-      </SongsContainer>
-
-      <SongsContainer>
-        <SongsTitleContainer>
-          <h3>Recently Played </h3>
-          <p>See more</p>
-        </SongsTitleContainer>
-        <Songs>
-          {/* <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard />
-          <MusicCard /> */}
-        </Songs>
-      </SongsContainer>
+          </Songs>
+        </SongsContainer>
+      </AllSongsHolder>
     </MainContainer>
   );
 };
@@ -147,6 +188,19 @@ const Banner = styled.section`
     border-radius: 10px;
     filter: brightness(70%) contrast(120%) saturate(120%);
     transition: all 0.3s ease-in;
+  }
+  aside {
+    padding-left: 3rem;
+    padding-top: 3rem;
+    width: fit-content;
+    h5 {
+      font-size: clamp(1rem, 2.5rem, 2.5rem);
+      font-weight: 700;
+    }
+    h4 {
+      font-size: clamp(1rem, 2rem, 2rem);
+      font-weight: 500;
+    }
   }
   &:hover {
     &::after {
@@ -213,6 +267,13 @@ const Banner = styled.section`
     }
   }
 `;
+
+const AllSongsHolder = styled.div`
+  background-color: rgba(255, 255, 255, 0.02);
+  padding: 2%;
+  margin-top: 5%;
+  border-radius: 1rem;
+`;
 const Songs = styled.section`
   overflow-x: auto;
   overflow-y: hidden;
@@ -221,9 +282,9 @@ const Songs = styled.section`
   display: flex;
   align-items: center;
   gap: 3rem;
-  width: 982px;
+  width: 61vw;
   scroll-behavior: smooth;
-  padding: 20px;
+  padding: 2%;
   &::focus-within {
     gap: 5rem;
   }
@@ -241,10 +302,12 @@ const SongsTitleContainer = styled.div`
   margin-bottom: 2%;
   h3 {
     font-weight: 700;
+    font-size: clamp(1rem, 1.5rem, 1.5rem);
   }
   p {
     color: var(--primary);
-    font-size: 0.8rem;
+    font-size: clamp(0.8rem, 1.1rem, 1.1rem);
+
     &:hover {
       cursor: pointer;
       opacity: 0.9;

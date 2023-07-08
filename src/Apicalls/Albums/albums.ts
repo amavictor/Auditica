@@ -1,14 +1,9 @@
 import { requests } from "../../utils";
 
 
-export const getNewRelease = (limit?: any, offset?: any) => {
-  if (limit && offset) {
-    return requests({
-      url: `/browse/new-releases?limit=${limit}&offset=${offset}`,
-    });
-  }
+export const getNewRelease = (limit = 30, offset = 0) => {
   return requests({
-    url: `/browse/new-releases`,
+    url: `/browse/new-releases?limit=${limit}&offset=${offset}`,
   });
 };
 

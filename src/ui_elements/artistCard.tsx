@@ -5,20 +5,14 @@ import { PlayIcon } from "../assets";
 interface Props {
   image: string;
   title: string;
-  artist: string;
 }
 
-export const MusicCard = ({ image, title, artist }: Props) => {
+export const ArtistCard = ({ image, title }: Props) => {
   return (
     <CardContainer>
       <img src={`${image}`} alt="image_item" />
-
       <div>
-        <div>
-          <h5>{title.substring(0, 7)}...</h5>
-          <p>{artist}</p>
-        </div>
-        <PlayIcon className="musicCardIcon" />
+        <h5>{title}</h5>
       </div>
     </CardContainer>
   );
@@ -27,10 +21,7 @@ export const MusicCard = ({ image, title, artist }: Props) => {
 const CardContainer = styled.div`
   transition: all 0.3s ease;
   position: relative;
-  & > div {
-    display: flex;
-    justify-content: space-between;
-  }
+
   .musicCardIcon {
     transition: all 0.5s ease;
     &:hover {
@@ -64,6 +55,7 @@ const CardContainer = styled.div`
     box-shadow: -1px 10px 7px -5px rgba(0, 0, 0, 0.48);
     -webkit-box-shadow: -1px 10px 7px -5px rgba(0, 0, 0, 0.48);
     -moz-box-shadow: -1px 10px 7px -5px rgba(0, 0, 0, 0.48);
+    cursor: pointer;
     img {
       box-shadow: -1px 10px 7px -5px rgba(0, 0, 0, 0.48);
       -webkit-box-shadow: -1px 10px 7px -5px rgba(0, 0, 0, 0.48);

@@ -1,6 +1,6 @@
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Login from "./pages/Login/Login";
-import { useEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useState } from "react";
 import { MainApp } from "./pages/mainApp/mainApp";
 import { Search } from "./pages/search/search";
@@ -8,34 +8,42 @@ import { Liked } from "./pages/liked/liked";
 import { MainLayout } from "./layout/mainLayout";
 import { QueryClient } from "react-query";
 import { QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools"
-
-
+import { ReactQueryDevtools } from "react-query/devtools";
+import { UserContextProvider } from "./contexts/providers/userContextProviders";
+import { Details } from "./pages/details/details";
 function App() {
   const location = useLocation();
-  const [authToken, setAuthToken] = useState<boolean>(false);
   const navigate = useNavigate();
   const queryClient = new QueryClient();
+  const [authToken, setAuthToken] = useState(false);
 
-  useLayoutEffect(() => {
+  useLayoutEffect(() => {    
     let hash: string = location.hash;
-
     if (hash) {
       const searchParams: any = new URLSearchParams(hash.slice(1));
       const accessToken: any = searchParams.get("access_token");
-      console.log(accessToken);
       window.localStorage.setItem("auditicaToken", accessToken);
-      navigate("/", { replace: true });
       setAuthToken(true);
+      navigate("/", { replace: true });
+    }
+    else {
+      const token = localStorage.getItem("auditicaToken")
+      if (token) {
+        setAuthToken(true)
+      }
+      else {
+        setAuthToken(false)
+      }
     }
 
-    const setInvalidToken = setInterval(() => {
-      window.localStorage.setItem("toek", "");
-      setAuthToken(false);
-    }, 180000);
+    // const setInvalidToken = setTimeout(() => {
+    //   window.localStorage.setItem("toek", "")
+    //   localStorage.setItem("auditicaUser", null)
+    //   setAuthToken(false);
+    // }, 300000);
 
-    return () => clearInterval(setInvalidToken);
-  }, []);
+    // return () => clearInterval(setInvalidToken);
+  }, [location.hash, navigate]);
 
   interface Components {
     path: string;
@@ -54,24 +62,30 @@ function App() {
       path: "/liked-songs",
       component: <Liked />,
     },
+    {
+      path: "/details",
+      component: <Details/>
+    },
   ];
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Routes>
-        {/* <Route path={"/"} element={<Login />} /> */}
-        {authToken ? (
-          routes.map((route, index) => (
-            <Route
-              key={index}
-              path={route.path}
-              element={<MainLayout>{route.component}</MainLayout>}
-            />
-          ))
-        ) : (
-          <Route path={"/"} element={<Login />} />
-        )}
-      </Routes>
+      <UserContextProvider>
+        <Routes>
+          {/* <Route path={"/"} element={<Login />} /> */}
+          {authToken ? (
+            routes.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                element={<MainLayout>{route.component}</MainLayout>}
+              />
+            ))
+          ) : (
+            <Route path={"/"} element={<Login />} />
+          )}
+        </Routes>
+      </UserContextProvider>
       <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
     </QueryClientProvider>
   );

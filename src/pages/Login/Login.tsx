@@ -8,7 +8,7 @@ import {
 import Spotify from "../../assets/spotify.png"
 import { Button } from "../../ui_elements/Button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AUTHTENTICATION_ENDPOINT, CLIENT_ID, RESPONSE_TYPE } from "../../utils";
+import { AUTHTENTICATION_ENDPOINT, CLIENT_ID, RESPONSE_TYPE, SCOPES } from "../../utils";
 import { REDIRECT_URI } from './../../utils';
 
 
@@ -16,11 +16,12 @@ const Login = () => {
   const location = useLocation()
   const [showLogo, setShowLogo] = useState(true);
   useEffect(() => {
-    setTimeout(() => setShowLogo(false), 6000);
+    setTimeout(() => setShowLogo(false), 5000);
   }, [location]);
 
   const loginWithSpotify = () => {
-    window.location.href=`${AUTHTENTICATION_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&show_dialog=true`
+    const scopeParam:string = SCOPES.join(" ")
+    window.location.href=`${AUTHTENTICATION_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&show_dialog=true&scope=${scopeParam}`;
   }
 
 
