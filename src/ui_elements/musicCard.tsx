@@ -15,7 +15,7 @@ export const MusicCard = ({ image, title, artist }: Props) => {
 
       <div>
         <div>
-          <h5>{title.substring(0, 7)}...</h5>
+          <h5>{title.substring(0, 13)}...</h5>
           <p>{artist}</p>
         </div>
         <PlayIcon className="musicCardIcon" />
@@ -47,7 +47,7 @@ const CardContainer = styled.div`
     transition: all 0.3s ease;
   }
   h5 {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     margin: 0;
   }

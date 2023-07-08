@@ -10,9 +10,11 @@ import {
 } from "../../Apicalls/User/users";
 import { ArtistCard } from "../../ui_elements/artistCard";
 import { TopMixCard } from "../../ui_elements/topMixCard";
+import { useNavigate } from "react-router-dom";
 
 export const MainApp = () => {
   // const{user} = useContext(UserContext)
+  const navigate = useNavigate()
 
   const {
     data: newRelease,
@@ -69,7 +71,7 @@ export const MainApp = () => {
         <SongsContainer>
           <SongsTitleContainer>
             <h3>New Releases </h3>
-            <p>See more</p>
+            <p onClick={()=>navigate("/details", {state:{type:"new-release"}})}>See more</p>
           </SongsTitleContainer>
           <Songs>
             {newRelease?.data?.albums?.items.map((song: any) => (
@@ -85,7 +87,7 @@ export const MainApp = () => {
         <SongsContainer>
           <SongsTitleContainer>
             <h3>From Your Favourite Artists</h3>
-            <p>See more</p>
+            <p onClick={()=>navigate("/details",{state:{type:"favorite"}})}>See more</p>
           </SongsTitleContainer>
           <Songs>
             {topItemsArtists?.data?.items?.map((song: any) => (
@@ -97,7 +99,7 @@ export const MainApp = () => {
         <SongsContainer>
           <SongsTitleContainer>
             <h3>Your Top Mixes</h3>
-            <p>See more</p>
+            <p onClick={()=>navigate("/details",{state:{type:"top-mixes"}})}>See more</p>
           </SongsTitleContainer>
           <Songs>
             {topItemsTracks?.data?.items?.map((song: any) => (
@@ -115,7 +117,7 @@ export const MainApp = () => {
         <SongsContainer>
           <SongsTitleContainer>
             <h3>Recently Played </h3>
-            <p>See more</p>
+            <p onClick={()=>navigate("/recently-played")}>See more</p>
           </SongsTitleContainer>
           <Songs>
             {recentlyPlayed?.data?.items?.map((song: any) => (
