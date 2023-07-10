@@ -8,6 +8,8 @@ import {
 } from "../../Apicalls/User/users";
 import styled from "styled-components";
 import { MusicCard } from "../../ui_elements/musicCard";
+import { ArtistCard } from "../../ui_elements/artistCard";
+import { TopMixCard } from "../../ui_elements/topMixCard";
 
 export const Details = () => {
   const { state } = useLocation();
@@ -82,6 +84,36 @@ export const Details = () => {
               artist={song?.artists[0]?.name}
             />
           ))}
+
+        {state?.type === "favorite" &&
+          topItemsArtists &&
+          topItemsArtists?.data?.items?.map((song: any) => (
+            <ArtistCard image={song?.images[1]?.url} title={song?.name} />
+          ))}
+
+        {state?.type === "top-mixes" &&
+          topItemsTracks &&
+          topItemsTracks?.data?.items?.map((song: any) => (
+            <TopMixCard
+              image={song?.album?.images[1]?.url}
+              title={song?.album?.name}
+              artists={song?.artists
+                .map((artists: any) => artists?.name)
+                .join(", ")}
+            />
+          ))}
+
+        {state?.type === "recently-played" &&
+          recentlyPlayed &&
+          recentlyPlayed?.data?.items?.map((song: any) => (
+            <TopMixCard
+              image={song?.track?.album?.images[1]?.url}
+              title={song?.track?.album?.name}
+              artists={song?.track?.artists
+                .map((artists: any) => artists?.name)
+                .join(", ")}
+            />
+          ))}
       </div>
     </DetailsContainer>
   );
@@ -104,7 +136,6 @@ const DetailsContainer = styled.main`
     width: inherit;
     height: inherit;
     justify-content: center;
-
   }
 
   &::-webkit-scrollbar {

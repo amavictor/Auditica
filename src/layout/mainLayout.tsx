@@ -15,7 +15,7 @@ const SideMenuLayout = styled.div`
   flex: 0.1;
 `;
 const Children = styled.div`
-  flex: 0.7;
+  flex: 0.75;
 `
 const AsideMainLyout = styled.aside`
   flex:0.2 ;

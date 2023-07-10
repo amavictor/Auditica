@@ -62,3 +62,21 @@ export const SeeMore = (
 ) => {
   setCurrentPageLimit(currentPageLimit + increaseValue);
 };
+
+export const randomizeIndex = (item: []) => {
+  return Math.floor(Math.random() * item.length);
+};
+
+export const addNumberComma = (number: number) => {
+  if (number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+};
+
+export const convertToMinutes = (milliSeconds: number) => {
+  const seconds = Math.floor(milliSeconds / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+
+  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+};

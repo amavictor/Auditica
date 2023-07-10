@@ -26,6 +26,10 @@ export const TopMixCard = ({ image, title, artists  }: Props) => {
 const CardContainer = styled.div`
   transition: all 0.3s ease;
   position: relative;
+  padding: 20px;
+  
+  background-color: rgba(255, 255, 255, 0.03);
+
   & > div {
     display: flex;
     justify-content: space-between;
@@ -59,7 +63,7 @@ const CardContainer = styled.div`
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    padding: 20px;
+    padding: 22px;
     border-radius: 2%;
     img {
       box-shadow: -1px 10px 7px -5px rgba(0, 0, 0, 0.48);

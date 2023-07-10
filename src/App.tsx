@@ -11,6 +11,7 @@ import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { UserContextProvider } from "./contexts/providers/userContextProviders";
 import { Details } from "./pages/details/details";
+import { ArtistPage } from "./pages/artists/artistPage";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -66,6 +67,11 @@ function App() {
       path: "/details",
       component: <Details/>
     },
+    {
+      path: "/artists/:id",
+      component: <ArtistPage/>
+    },
+
   ];
 
   return (

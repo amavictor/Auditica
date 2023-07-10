@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { getForYou, getNewRelease } from "../../Apicalls/Albums/albums";
 import { useGetRequest } from "../../custom-hooks/get-request";
@@ -11,10 +11,11 @@ import {
 import { ArtistCard } from "../../ui_elements/artistCard";
 import { TopMixCard } from "../../ui_elements/topMixCard";
 import { useNavigate } from "react-router-dom";
+import { randomizeIndex } from "../../utils";
 
 export const MainApp = () => {
   // const{user} = useContext(UserContext)
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const {
     data: newRelease,
@@ -48,8 +49,37 @@ export const MainApp = () => {
       refetchOnWindowFocus: false,
     }
   );
-  console.log(recentlyPlayed, "HOHHOHOHOHHO");
 
+  const [randomIndexArtists, setRandomIndexArtists] = useState<number | null>();
+  const [randomIndexTracks, setRandomIndexTracks] = useState<number | null>();
+  const [randomIndexTracks2, setRandomIndexTracks2] = useState<number | null>();
+  const [randomIndexTracks3, setRandomIndexTracks3] = useState<number | null>();
+
+  const [randomIndexRecentlyPlayed, setRandomIndexRecentlyPlayed] = useState<
+    number | null
+  >();
+
+  useEffect(() => {
+    if (topItemsArtists?.data?.items) {
+      setRandomIndexArtists(randomizeIndex(topItemsArtists.data.items));
+    }
+    if (recentlyPlayed?.data?.items) {
+      setRandomIndexRecentlyPlayed(randomizeIndex(recentlyPlayed?.data?.items));
+    }
+    if (topItemsTracks?.data?.items) {
+      setRandomIndexTracks(randomizeIndex(topItemsTracks?.data?.items));
+    }
+    if (topItemsTracks?.data?.items) {
+      setRandomIndexTracks2(randomizeIndex(topItemsTracks?.data?.items));
+    }
+    if (topItemsTracks?.data?.items) {
+      setRandomIndexTracks3(randomizeIndex(topItemsTracks?.data?.items));
+    }
+  }, [topItemsArtists]);
+
+  const handleNavigateToArtist = (id: string) => {
+    navigate(`/artist/${id}`);
+  };
   return (
     <MainContainer>
       <Banner>
@@ -67,11 +97,117 @@ export const MainApp = () => {
         </div>
       </Banner>
 
+      <QuickAccess>
+        <QuickAccessCard>
+          <img
+            src={recentlyPlayed?.data?.items[0]?.track?.album?.images[1]?.url}
+            alt="lastPlayed"
+          />
+          <p>{recentlyPlayed?.data?.items[0]?.track?.album?.name}</p>
+        </QuickAccessCard>
+
+        <QuickAccessCard>
+          <img
+            src={
+              topItemsArtists?.data?.items[
+                randomIndexArtists ? randomIndexArtists : 0
+              ]?.images[1]?.url
+            }
+            alt="lastPlayed"
+          />
+          <p>
+            {
+              topItemsArtists?.data?.items[
+                randomIndexArtists ? randomIndexArtists : 0
+              ]?.name
+            }
+          </p>
+        </QuickAccessCard>
+
+        <QuickAccessCard>
+          <img
+            src={
+              topItemsTracks?.data?.items[
+                randomIndexTracks ? randomIndexTracks : 5
+              ]?.album?.images[1]?.url
+            }
+            alt="lastPlayed"
+          />
+          <p>
+            {
+              topItemsTracks?.data?.items[
+                randomIndexTracks ? randomIndexTracks : 5
+              ]?.album?.name
+            }
+          </p>
+        </QuickAccessCard>
+
+        <QuickAccessCard>
+          <img
+            src={
+              topItemsTracks?.data?.items[
+                randomIndexTracks2 ? randomIndexTracks2 : 13
+              ]?.album?.images[1]?.url
+            }
+            alt="lastPlayed"
+          />
+          <p>
+            {
+              topItemsTracks?.data?.items[
+                randomIndexTracks2 ? randomIndexTracks2 : 13
+              ]?.album?.name
+            }
+          </p>
+        </QuickAccessCard>
+
+        <QuickAccessCard>
+          <img
+            src={
+              recentlyPlayed?.data?.items[
+                randomIndexRecentlyPlayed ? randomIndexRecentlyPlayed : 16
+              ]?.track?.album?.images[1]?.url
+            }
+            alt="lastPlayed"
+          />
+          <p>
+            {
+              recentlyPlayed?.data?.items[
+                randomIndexRecentlyPlayed ? randomIndexRecentlyPlayed : 16
+              ]?.track?.album?.name
+            }
+          </p>
+        </QuickAccessCard>
+
+        <QuickAccessCard>
+          <img
+            src={
+              topItemsTracks?.data?.items[
+                randomIndexTracks3 ? randomIndexTracks3 : 12
+              ]?.album?.images[1]?.url
+            }
+            alt="lastPlayed"
+          />
+          <p>
+            {
+              topItemsTracks?.data?.items[
+                randomIndexTracks3 ? randomIndexTracks3 : 12
+              ]?.album?.name
+            }
+          </p>
+        </QuickAccessCard>
+      </QuickAccess>
+
       <AllSongsHolder>
         <SongsContainer>
           <SongsTitleContainer>
             <h3>New Releases </h3>
-            <p onClick={()=>navigate("/details", {state:{type:"new-release"}})}>See more</p>
+            <p
+              onClick={() =>
+                navigate("/details", { state: { type: "new-release" } })
+              }
+            >
+              See more
+            </p>
           </SongsTitleContainer>
           <Songs>
             {newRelease?.data?.albums?.items.map((song: any) => (
@@ -87,11 +223,26 @@ export const MainApp = () => {
         <SongsContainer>
           <SongsTitleContainer>
             <h3>From Your Favourite Artists</h3>
-            <p onClick={()=>navigate("/details",{state:{type:"favorite"}})}>See more</p>
+            <p
+              onClick={() =>
+                navigate("/details", { state: { type: "favorite" } })
+              }
+            >
+              See more
+            </p>
           </SongsTitleContainer>
           <Songs>
             {topItemsArtists?.data?.items?.map((song: any) => (
-              <ArtistCard image={song?.images[1]?.url} title={song?.name} />
+              <ArtistCard
+                image={song?.images[1]?.url}
+                title={song?.name}
+                onClick={() =>
+                  navigate(`/artists/${song?.name}`, {
+                    state: { details: song },
+                  })
+                }
+                key={song?.id}
+              />
             ))}
           </Songs>
         </SongsContainer>
@@ -99,7 +250,13 @@ export const MainApp = () => {
         <SongsContainer>
           <SongsTitleContainer>
             <h3>Your Top Mixes</h3>
-            <p onClick={()=>navigate("/details",{state:{type:"top-mixes"}})}>See more</p>
+            <p
+              onClick={() =>
+                navigate("/details", { state: { type: "top-mixes" } })
+              }
+            >
+              See more
+            </p>
           </SongsTitleContainer>
           <Songs>
             {topItemsTracks?.data?.items?.map((song: any) => (
@@ -117,7 +274,15 @@ export const MainApp = () => {
         <SongsContainer>
           <SongsTitleContainer>
             <h3>Recently Played </h3>
-            <p onClick={()=>navigate("/recently-played")}>See more</p>
+            <p
+              onClick={() =>
+                navigate("/details", {
+                  state: { type: "recently-played" },
+                })
+              }
+            >
+              See more
+            </p>
           </SongsTitleContainer>
           <Songs>
             {recentlyPlayed?.data?.items?.map((song: any) => (
@@ -178,7 +343,7 @@ const MainContainer = styled.main`
 
 const Banner = styled.section`
   width: 100%;
-  height: 40vh;
+  height: 25vh;
   position: relative;
   transition: all 0.3s ease;
   img {
@@ -270,6 +435,45 @@ const Banner = styled.section`
   }
 `;
 
+const QuickAccess = styled.section`
+  width: 100%;
+  height: 30vh;
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.02);
+  margin-top: 5%;
+  border-radius: 1rem;
+  transition: all 0.5s ease;
+  padding: 2%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const QuickAccessCard = styled.div`
+  display: flex;
+  width: 18vw;
+  height: 10vh;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 1% 0;
+  border-radius: 0.5rem;
+  align-items: center;
+  padding-right: 0.5rem;
+  gap: 6%;
+
+  p {
+    font-size: clamp(0.8rem, 1.1rem, 1.1rem);
+    font-weight: 500;
+  }
+
+  img {
+    width: 5vw;
+    height: 10vh;
+    object-fit: cover;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+  }
+`;
+
 const AllSongsHolder = styled.div`
   background-color: rgba(255, 255, 255, 0.02);
   padding: 2%;
@@ -296,7 +500,7 @@ const Songs = styled.section`
   transition: all 0.5s ease;
 `;
 const SongsContainer = styled.div`
-  margin-top: 6%;
+  margin-top: 5%;
 `;
 const SongsTitleContainer = styled.div`
   display: flex;
@@ -313,6 +517,7 @@ const SongsTitleContainer = styled.div`
     &:hover {
       cursor: pointer;
       opacity: 0.9;
+      text-decoration: underline;
     }
   }
 `;
