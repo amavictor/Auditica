@@ -82,6 +82,17 @@ export const ArtistPage = () => {
           </LikedSongsContainer>
         </LikedSongsContainer>
       </PopularContainer>
+
+      <h2>Discography</h2>
+      <DiscoGraphyContainer>
+        <DiscoGraphyMenu>
+          <DiscoMenuItem>Popular Releases</DiscoMenuItem>
+          <DiscoMenuItem>Albums</DiscoMenuItem>
+          <DiscoMenuItem>Singles</DiscoMenuItem>
+        </DiscoGraphyMenu>
+      </DiscoGraphyContainer>
+            
+
     </Container>
   );
 };
@@ -206,11 +217,11 @@ const PlayButton = styled(PlayIcon)`
 const PopularContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 5%;
+  gap: 10%;
 `;
 const LikedSongsContainer = styled.div`
   height: 30vh;
-  width: 100%;
+  width: 70%;
 
   img {
     width: 100px;
@@ -248,7 +259,7 @@ const TrackContainer = styled.div`
   > div {
     display: flex;
     align-items: center;
-    width: 30%;
+    width: 50%;
     gap: 10%;
     p {
       font-weight: 600;
@@ -262,4 +273,18 @@ const TrackContainer = styled.div`
   }
 `;
 
-const DiscoGraphyContainer = styled.section``;
+const DiscoGraphyContainer = styled.section`
+  width: 100%;
+  padding-left: 4%;
+`;
+
+const DiscoGraphyMenu = styled.div`
+
+`
+const DiscoMenuItem = styled(GenreButtons)`
+  transition: all ease .3s;
+  :hover{
+    background-color: white;
+    color: black;
+  }
+`

@@ -16,9 +16,9 @@ const SideMenuLayout = styled.div`
 `;
 const Children = styled.div`
   flex: 0.75;
-`
+`;
 const AsideMainLyout = styled.aside`
-  flex:0.2 ;
+  flex: 0.2;
   padding: 1rem;
 `;
 
@@ -29,10 +29,7 @@ export const MainLayout = ({ children }: any) => {
         <SideMenuLayout>
           <SideMenu />
         </SideMenuLayout>
-        <Children>
-        {children}
-        </Children>
-       
+        <Children>{children}</Children>
         <AsideMainLyout>
           <TopStrams />
           <Categories />
